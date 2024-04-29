@@ -1,6 +1,6 @@
 # Project Summary
 
-&quot;Learn Academy&quot; revolutionizes the educational landscape by offering an innovative online
+My project &quot;Learn Academy&quot; , a online course marketplace, revolutionizes the educational landscape by offering an innovative online
 platform where learners and instructors seamlessly connect to explore a vast array of courses.
 Through user-friendly features like user login, registration, and profile management, students and
 teachers can engage effortlessly. The platform boasts diverse content formats, from quizzes to
