@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discussion Forum</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        #discussion {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 20px;
+            min-height: 200px;
+            max-height: 400px; /* Added max-height to make it scrollable */
+            overflow-y: scroll;
+            background-color: #f9f9f9; /* Added background color */
+            border-radius: 5px; /* Added border radius */
+        }
+        .message {
+            background-color: #e2e2e2; /* Added background color */
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px; /* Added border radius */
+        }
+        #messageInput {
+            width: calc(100% - 22px);
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+        }
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Discussion Forum</h1>
+        <span id="username" style="display: none;">{{ request.user.username }}</span>
+        <div id="discussion"></div>
+        <textarea id="messageInput" placeholder="Type your message here..."></textarea>
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        // Function to get the URL pathname
+        function getURLPathname() {
+            return window.location.pathname;
+        }
+        
+        // Function to format the current time
+        function formatTime() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const time = `${hours}:${minutes}`;
+            return time;
+        }
+
+        // Function to load messages for the current URL from local storage
+        function loadMessages() {
+            const urlPathname = getURLPathname();
+            const messages = localStorage.getItem(`messages_${urlPathname}`);
+            if (messages) {
+                document.getElementById('discussion').innerHTML = messages; // Use innerHTML to render HTML tags
+            }
+        }
+    
+        // Function to save a new message to local storage
+        function saveMessage(message) {
+            const urlPathname = getURLPathname();
+            const username = document.getElementById('username').innerText; // Extract username from the hidden element
+            const time = formatTime(); // Get current time
+            let messages = localStorage.getItem(`messages_${urlPathname}`);
+            const newMessage = `<div class="message"><strong>${username} (${time}):</strong> ${message}</div>`;
+            console.log(message); // Format message with username and time
+            messages = messages ? `${messages}\n${newMessage}` : newMessage;
+            localStorage.setItem(`messages_${urlPathname}`, messages);
+        }
+    
+        // Function to send a new message
+        function sendMessage() {
+            const message = document.getElementById('messageInput').value;
+            if (message.trim() !== '') {
+                saveMessage(message);
+                loadMessages(); // Reload messages after adding new one
+                document.getElementById('messageInput').value = ''; // Clear input field
+            }
+        }
+    
+        // Load messages when the page loads
+        window.onload = loadMessages;
+    </script>
+    
+</body>
+</html>

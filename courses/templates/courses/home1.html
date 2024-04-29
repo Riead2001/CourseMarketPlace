@@ -1,0 +1,17 @@
+{% extends './base.html' %}
+{% load static %}
+{% load course_custom_tag %}
+
+{% block title %} Home {% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Create a Course</h5>
+            <p class="card-text">Get started by creating a new course.</p>
+            <a href="{% url 'cc' %}" class="btn btn-primary">Create Course</a>
+        </div>
+    </div>
+</div>
+{% endblock content %}

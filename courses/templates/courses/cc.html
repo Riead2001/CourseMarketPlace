@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Course</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        textarea,
+        input[type="file"] {
+            width: calc(100% - 22px);
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            resize: none;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!-- Course Information -->
+        <label for="name">Course Name:</label>
+        <input type="text" id="name" name="name" required><br>
+    
+        <label for="slug">Course Slug:</label>
+        <input type="text" id="slug" name="slug" required><br>
+    
+        <label for="description">Course Description:</label><br>
+        <textarea id="description" name="description" required></textarea><br>
+    
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" required><br>
+    
+        <label for="discount">Discount:</label>
+        <input type="number" id="discount" name="discount" value="0"><br>
+    
+        <label for="length">Course Length (in weeks):</label>
+        <input type="number" id="length" name="length" required><br>
+    
+        <label for="image">Course Image:</label>
+        <input type="file" id="image" name="image" required><br>
+    
+        <label for="resource">Course Resource:</label>
+        <input type="file" id="resource" name="resource" required><br>
+    
+        <!-- Video Information -->
+        <hr>
+        <label>Video Details:</label><br>
+        <div id="videos">
+            <div class="video-details">
+                <label for="video_serial_number">Video Serial Number:</label>
+                <input type="number" name="video_serial_number" required><br>
+    
+                <label for="video_title">Video Title:</label>
+                <input type="text" name="video_title" required><br>
+    
+                <label for="video_id">Video ID:</label>
+                <input type="text" name="video_id" required><br>
+    
+                <label for="is_preview">Is Preview:</label>
+                <input type="checkbox" name="is_preview"><br>
+            </div>
+        </div>
+        <button type="button" id="add_video">Add Another Video</button>
+    
+        <!-- Quiz Information -->
+        <hr>
+        <label>Quiz Details:</label><br>
+        <div id="quizzes">
+            <div class="quiz-details">
+                <label for="quiz_number">Quiz Number:</label>
+                <input type="number" name="quiz_number" required><br>
+    
+                <label for="quiz_link">Quiz Link:</label>
+                <input type="url" name="quiz_link" required><br>
+            </div>
+        </div>
+        <button type="button" id="add_quiz">Add Another Quiz</button>
+    
+        <!-- Submit Button -->
+        <hr>
+        <input type="submit" value="Create Course and Videos">
+    </form>
+    
+    
+    <!-- Your JavaScript code here if needed -->
+    <script>
+        // Function to add a new video input field
+        document.getElementById("add_video").addEventListener("click", function() {
+            var videosDiv = document.getElementById("videos");
+            var newVideoDiv = document.createElement("div");
+            newVideoDiv.innerHTML = `
+                <hr>
+                <div class="video-details">
+                    <label for="video_serial_number">Video Serial Number:</label>
+                    <input type="number" name="video_serial_number" required><br>
+    
+                    <label for="video_title">Video Title:</label>
+                    <input type="text" name="video_title" required><br>
+    
+                    <label for="video_id">Video ID:</label>
+                    <input type="text" name="video_id" required><br>
+    
+                    <label for="is_preview">Is Preview:</label>
+                    <input type="checkbox" name="is_preview"><br>
+                </div>
+            `;
+            videosDiv.appendChild(newVideoDiv);
+        });
+    
+        // Function to add a new quiz input field
+        document.getElementById("add_quiz").addEventListener("click", function() {
+            var quizzesDiv = document.getElementById("quizzes");
+            var newQuizDiv = document.createElement("div");
+            newQuizDiv.innerHTML = `
+                <hr>
+                <div class="quiz-details">
+                    <label for="quiz_number">Quiz Number:</label>
+                    <input type="number" name="quiz_number" required><br>
+    
+                    <label for="quiz_link">Quiz Link:</label>
+                    <input type="url" name="quiz_link" required><br>
+                </div>
+            `;
+            quizzesDiv.appendChild(newQuizDiv);
+        });
+    </script>
+    
+</body>
+</html>

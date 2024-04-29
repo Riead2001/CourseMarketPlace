@@ -1,0 +1,194 @@
+{% extends './base.html' %}
+
+{% load static %}
+{% load course_custom_tag %}
+
+{% block title %} 
+  {{ block.super }} ::
+  {{ course.name }}
+{% endblock title %}
+
+{% block css %} 
+  <link rel="stylesheet" href="{% static 'courses/css/course_page.css' %}">
+{% endblock css %}
+
+{% block js %} 
+  <script src="{% static 'courses/js/course_page.js' %}"></script>
+{% endblock js %}
+
+{% block content %}
+  {% is_enrolled request.user course as enrolled %}
+
+  <div class="container-fluid">
+    <div class="row mt-3">
+      <!-- Navigation bar -->
+      <div class="col-12">
+        <ul class="nav nav-tabs">
+          <li class="nav-item">
+            <a class="nav-link active" href="#videos">Videos</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#course-details">Course Details</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#prerequisites">Prerequisites</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#learnings">Learnings</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#quizzes">Quizzes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#assignments">Assignments</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#rating">Rating</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#scholarship">Scholarship</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Videos section -->
+    <div class="row mt-3 section" id="videos">
+      <!-- Place your videos section content here -->
+      <div class="col-lg col-md-12">
+        <div class="video">
+          <iframe id="player" width="100%" height="315" src="https://www.youtube.com/embed/{{ video.video_id }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-12">
+        <ul id="video-list" class="list-group">
+          {% for v in videos %}
+          <li class="list-group-item {% if v.serial_number == video.serial_number %}active{% endif %}">
+            <a href="?lecture={{ v.serial_number }}" class="{% if not v.is_preview and not enrolled %}text-muted disable{% endif %}">{{ v.title }}</a>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Course Details section -->
+    <div class="row mt-3 section" id="course-details">
+      <!-- Place your course details section content here -->
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">{{ course.name }}</h4>
+            <p class="card-text">{{ course.description }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Prerequisites section -->
+    <div class="row mt-3 section" id="prerequisites">
+      <!-- Place your prerequisites section content here -->
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Prerequisite</h4>
+            <ol>
+              {% for pre in course.prerequisite_set.all %}
+              <li>{{ pre }}</li>
+              {% endfor %}
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Learnings section -->
+    <div class="row mt-3 section" id="learnings">
+      <!-- Place your learnings section content here -->
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Learnings</h4>
+            <ol>
+              {% for learning in course.learning_set.all %}
+              <li>{{ learning }}</li>
+              {% endfor %}
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quizzes section -->
+    <div class="row mt-3 section" id="quizzes">
+      <!-- Place your quizzes section content here -->
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Quizzes</h4>
+            <p>This section lists quizzes for the course. <a href="https://forms.gle/LLKA4XNu3EtW3n2x9">Click here</a> to view quizzes.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Assignments section -->
+    <div class="row mt-3 section" id="assignments">
+      <!-- Place your assignments section content here -->
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Assignments</h4>
+            <p>This section lists assignments for the course.</p>
+            <p>Assignment PDF: <a href="https://drive.google.com/drive/folders/1HKq8zbU-Kb-VRCPkBvh1zSHJ-aVeN2Ky">Open PDF</a></p>
+            <p>Assignment Submission: <a href="https://drive.google.com/drive/folders/1VEdTbPv4CXGvflP38o-FapL0voyPipkS" target="_blank">Google Drive Folder</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rating section -->
+    <div class="row mt-3 section" id="rating">
+      <!-- Place your rating section content here -->
+      <div class="col-12">
+        <a href="{% url 'course_rating' course.slug %}" class="btn btn-primary">Give Your Rating</a>
+      </div>
+    </div>
+
+    <!-- Scholarship section -->
+    <div class="row mt-3 section" id="scholarship">
+      <!-- Place your scholarship section content here -->
+      <div class="col-12">
+        <a href="{% url 'scholarship' course.slug %}" class="btn btn-success">APPLY for full Free scholarship</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // Function to show only the selected section
+    function showSection(sectionId) {
+      // Hide all sections
+      document.querySelectorAll('.section').forEach(function(section) {
+        section.style.display = 'none';
+      });
+      // Show the selected section
+      document.getElementById(sectionId).style.display = 'block';
+    }
+
+    // Show the default section (videos) on page load
+    document.addEventListener('DOMContentLoaded', function() {
+      showSection('videos');
+    });
+
+    // Event listener for navigation links
+    document.querySelectorAll('.nav-link').forEach(function(link) {
+      link.addEventListener('click', function(event) {
+        // Prevent default anchor behavior
+        event.preventDefault();
+        // Show the corresponding section
+        var sectionId = link.getAttribute('href').substr(1);
+        showSection(sectionId);
+      });
+    });
+  </script>
+{% endblock content %}

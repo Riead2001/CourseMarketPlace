@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scholarship Application Form</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    /* Custom styles for the scholarship form */
+    #scholarshipForm {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+    }
+
+    textarea.form-control {
+      resize: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 class="mt-5 mb-4 text-center">Scholarship Application Form</h2>
+    <form id="scholarshipForm" method="post" action="">
+      {% csrf_token %}
+      <div class="form-group">
+        <label for="reason">Reason for Applying</label>
+        <input type="text" class="form-control" id="reason" name="reason" required>
+      </div>
+      <div class="form-group">
+        <label for="description">Description</label>
+        <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Submit Application</button>
+    </form>
+  </div>
+
+  <!-- Bootstrap JavaScript (optional, if you need Bootstrap's JavaScript features) -->
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,76 @@
+{% extends './base.html' %}
+{% load static %}
+{% load course_custom_tag %}
+
+{% block title %} Home {% endblock title %}
+
+{% block content %}
+<div class="container-fluid">
+  <div class="row mt-3">
+    <!-- Search bar -->
+    <div class="col-md-6 mb-3">
+      <input type="text" id="searchInput" class="form-control" placeholder="Search for courses...">
+      <!-- Container for search results -->
+      <div id="searchResults" class="search-results"></div>
+    </div>
+    
+    {% for course in courses %}
+    <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+      <!-- Course card -->
+      <div class="card course-card">
+        <img class="card-img-top" src="{{ course.image.url }}" alt="">
+        <div class="card-body">
+          <h4 class="card-title">{{ course.name }}</h4>
+          <div class="card-text">
+            <p class="discount">Save {{ course.discount }}%</p>
+            <p class="price">
+              <del>{{ course.price }} টাকা</del>
+              <span class="discounted-price">{% apply_discount course.price course.discount as value %}{{ value }} টাকা</span>
+            </p>
+          </div>
+        </div>
+        <!-- Enrollment and Show More buttons -->
+        <div class="card-footer">
+          <a href="{% url 'demopay' course.slug %}" class="btn btn-primary btn-block">Enroll Now</a>
+          <a href="{% url 'coursepage' course.slug %}" class="btn btn-secondary btn-block">Show More</a>
+        </div>
+        <!-- Average Rating -->
+        <div class="card-footer">
+          <p class="average-rating">Average Rating: {{ course.avg_rating }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+  const searchInput = document.getElementById('searchInput');
+  const searchResults = document.getElementById('searchResults');
+  const courseCards = document.querySelectorAll('.course-card');
+
+  searchInput.addEventListener('input', function() {
+    const searchQuery = this.value.trim().toLowerCase();
+    searchResults.innerHTML = ''; // Clear previous search results
+    courseCards.forEach(function(card) {
+      const courseName = card.querySelector('.card-title').textContent.trim().toLowerCase();
+      if (courseName.includes(searchQuery)) {
+        card.style.display = 'block';
+        const resultItem = document.createElement('div');
+        resultItem.classList.add('search-result');
+        resultItem.textContent = courseName;
+        resultItem.addEventListener('click', function() {
+          window.location.href = card.querySelector('.btn-secondary').getAttribute('href');
+        });
+        searchResults.appendChild(resultItem);
+      } else {
+        card.style.display = 'none';
+      }
+    });
+    if (searchQuery === '') {
+      searchResults.innerHTML = ''; // Clear search results when search query is empty
+    }
+  });
+</script>
+
+{% endblock content %}
